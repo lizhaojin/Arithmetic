@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\Array\\test.js"
+            "program": "${workspaceFolder}\\timeout2.js"
         }
     ]
 }
