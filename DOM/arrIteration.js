@@ -131,7 +131,7 @@ new (Date.bind.apply(Date, [null, 2015, 1, 1]))
 // ES6
 new Date(...[2015, 1, 1]);
 
-//==================== * 1. 扩展运算符 spread 的应用 ==================
+//==================== 1. 扩展运算符 spread 的应用 ==================
 /**
  * 1. 复制数组（数组是复合数据类型，直接复制只是复制了指向底层数据结构的指针，而不是克隆一个全新的数组）
  */
@@ -262,7 +262,7 @@ const go = function*() {
 };
 [...go()] // [1, 2, 3]
 
-//================================ * 2. Array.from() ===========================================
+//================================ 2. Array.from() ===========================================
 /**
  * 0. Array.from 方法用于将两类对象转为真正的数组：
  * 1. 类似数组的对象(array-like-object)
@@ -298,3 +298,70 @@ Array.from('hello'); // ['h', 'e', 'l', 'l', 'o']
 
 let namesSet = new Set(['a', 'b']);
 Array.from(namesSet); //['a', 'b']
+
+// 如果参数是一个真正的数组，Array.from会返回一个一模一样的 新数组
+Array.from([1, 2, 3]) // [1, 2, 3]
+
+// 扩展运算符 (...)， 也可以将某些数据结构转换为数组
+// arguments 对象
+function foo() {
+    const args = [...arguments];
+}
+
+// NodeList对象
+[...document.querySelectorAll('div')]
+// 扩展运算符背后调用的是遍历器接口(Symbol.iterator)
+// Array.from 方法还支持 类数组对象，他必须有 length
+// 此时扩展运算符就无法转换了
+
+// 对于还没有部署方法的浏览器，可以使用 Array.prototype.slice方法替代
+const toArray = (() => 
+    Array.from ? Array.from : obj => [].slice.call(obj)
+)();
+
+// Array.from可以接受第二个参数，类似数组map方法
+// 对每个元素进行处理，将处理后的值放入返回的数组
+Array.from(arrayLike, x => x * x);
+// 等同于
+Array.from(arrayLike).map(x => x * x);
+
+Array.from([1, 2, 3], (x) => x * x);
+// [1, 4, 9]
+
+// 取出一组DOM节点的文本内容
+let spans = document.querySelectorAll('span.name');
+//map()
+let name1 = Array.prototype.map.call(spans, s => s.textContent);
+// Array.from()
+let name2 = Array.from(spans, s => s.textContent);
+
+// 将数组中的布尔值为 false 的成员 转为 0；
+Array.from([1, , 2, , 3], (n) => n || 0) // [1, 0, 2, 0, 3]
+
+// 返回各种数据的类型
+function typesOf() {
+    return Array.from(arguments, value => typeof value)
+}
+typesOf(null, [], NaN); // ['object', 'object', 'number']
+
+// 如果map函数里面用到了 this 关键字，还可以传入Array.from的第三个
+// 参数，用来绑定this
+Array.from({ length: 2 }, () => 'jack'); //['jack', 'jack']
+// 上面第一个参数指定了第二个参数运行的次数。
+
+// Array.from() 另一个应用是将 字符串 转为 数组，然后返回字符串的长度
+function countSymbols(str) {
+    return Array.from(str).length;
+}
+
+//================================ 3. Array.of() ===========================================
+// Array.of() 方法用于将一组 值， 转换为数组
+Array.of(3, 11, 8) //[3, 11, 8]
+Array.of(3, 11, 8).length; // 3
+// Array.of总是返回参数值组成的数组。如果没有参数，就返回一个空数组。
+// 模拟 Array.of 方法
+function ArrayOf() {
+    return [].slice.call(arguments);
+}
+
+//================================ 4. 数组实例的 copyWithin()  ===============================
