@@ -13,53 +13,40 @@
 function Stack() {
     let items = [];
 
-    this.push = function(element) {
-        items.push(element);
+    // 向栈添加元素
+    this.push = function(el) {
+        items.push(el);
     };
-    this.pop = function(element) {
+
+    // 从栈移除元素
+    this.pop = function() {
         return items.pop();
     };
+
+    // 查看栈顶元素
     this.peek = function() {
-        return items[items.length-1];
+        return items[items.length -1];
     };
+
+    // 检查栈是否为空
     this.isEmpty = function() {
         return items.length == 0;
     };
-    this.size = function() {
-        return items.length;
-    };
+
+    // 清空栈
     this.clear = function() {
         items = [];
     };
+
+    // 打印栈
     this.print = function() {
         console.log(items.toString());
     };
-}
 
-// let stack = new Stack();
-// stack.push(3);
-// stack.clear();
-// console.log(stack.peek());
-
-function baseConverter(decNumber, base) {
-    var remStack = new Stack();
-    var rem;
-    var baseString = '';
-    var digits = '0123456789ABCDEF';
-
-    while(decNumber > 0) {
-        //求模，只是求余数而已
-        rem = Math.floor(decNumber % base);
-        remStack.push(rem);
-        decNumber = Math.floor(decNumber / base);
+    // 栈中元素个数
+    this.size = function() {
+        return items.length;
     }
 
-    while(!remStack.isEmpty()){
-        //后进先出，寻找匹配的项，合成字符串输出
-        baseString += digits[remStack.pop()];
-    }
-
-    return baseString;
 }
-
-console.log(baseConverter(1662, 16));
+console.log(Stack === Stack.prototype.constructor);
